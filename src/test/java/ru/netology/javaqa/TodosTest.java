@@ -99,10 +99,33 @@ public class TodosTest {
     }
 
     @Test
-    public void CheckingForAMatchInMeetingTodos() {
+    public void haveMultipleTasks() {
         SimpleTask simpleTask = new SimpleTask(5, "проверка");
 
         String[] subtasks = {"Молоко", "проверка", "Хлеб"};
+        Epic epic = new Epic(55, subtasks);
+
+        Meeting meeting = new Meeting(
+                555,
+                "Выкатка 3й версии приложения",
+                "Приложение НетоБанка",
+                "проверка"
+        );
+
+        Todos todos = new Todos();
+        todos.add(simpleTask);
+        todos.add(epic);
+        todos.add(meeting);
+
+        Task[] expected = {simpleTask, epic, meeting};
+        Task[] actual = todos.search("проверка");
+        Assertions.assertArrayEquals(expected, actual);
+    }
+    @Test
+    public void haveOneTasks() {
+        SimpleTask simpleTask = new SimpleTask(5, "проверка");
+
+        String[] subtasks = {"Молоко", "Яйца", "Хлеб"};
         Epic epic = new Epic(55, subtasks);
 
         Meeting meeting = new Meeting(
@@ -113,13 +136,35 @@ public class TodosTest {
         );
 
         Todos todos = new Todos();
-        String query = "проверка";
         todos.add(simpleTask);
         todos.add(epic);
         todos.add(meeting);
 
-        Task[] expected = {simpleTask, epic};
-        Task[] actual = todos.search(query);
+        Task[] expected = {simpleTask};
+        Task[] actual = todos.search("проверка");
+        Assertions.assertArrayEquals(expected, actual);
+    }
+    @Test
+    public void noTasks() {
+        SimpleTask simpleTask = new SimpleTask(5, "проерка");
+
+        String[] subtasks = {"Молоко", "Яйца", "Хлеб"};
+        Epic epic = new Epic(55, subtasks);
+
+        Meeting meeting = new Meeting(
+                555,
+                "Выкатка 3й версии приложения",
+                "Приложение НетоБанка",
+                "Во вторник после обеда"
+        );
+
+        Todos todos = new Todos();
+        todos.add(simpleTask);
+        todos.add(epic);
+        todos.add(meeting);
+
+        Task[] expected = {};
+        Task[] actual = todos.search("проверка");
         Assertions.assertArrayEquals(expected, actual);
     }
 }
